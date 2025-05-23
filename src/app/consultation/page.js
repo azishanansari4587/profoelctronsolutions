@@ -319,7 +319,7 @@ const ScheduleConsultation = () => {
                       <h3 className="text-xl font-semibold text-gray-800">Proposal & Roadmap</h3>
                     </div>
                     <p className="text-gray-600">
-                      You'&apos;ll receive a comprehensive proposal outlining our recommended approach, timeline, and investment requirements.
+                      You&apos;ll receive a comprehensive proposal outlining our recommended approach, timeline, and investment requirements.
                     </p>
                   </div>
                   

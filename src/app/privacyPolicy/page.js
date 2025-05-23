@@ -120,7 +120,7 @@ const PrivacyPolicy = () => {
               
               <h2 className="text-2xl font-bold mt-8 mb-4">Changes to This Privacy Policy</h2>
               <p>
-                We may update this privacy policy from time to time. The updated version will be indicated by an updated "Last Updated" date and the updated version will be effective as soon as it is accessible. We encourage you to review this privacy policy frequently to be informed of how we are protecting your information.
+                We may update this privacy policy from time to time. The updated version will be indicated by an updated &quot;Last Updated&quot; date and the updated version will be effective as soon as it is accessible. We encourage you to review this privacy policy frequently to be informed of how we are protecting your information.
               </p>
               
               <Separator className="my-8" />

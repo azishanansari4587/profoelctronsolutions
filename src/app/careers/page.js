@@ -75,7 +75,7 @@ const Careers = () => {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Join Our Team</h1>
             <p className="text-lg text-gray-600 mb-8">
-              We're looking for talented individuals who are passionate about technology and innovation.
+              We&apos;re looking for talented individuals who are passionate about technology and innovation.
               Join us in creating cutting-edge solutions for our clients.
             </p>
             <Button size="lg">View Open Positions</Button>
@@ -202,7 +202,7 @@ const Careers = () => {
             <div className="bg-tech-blue/5 p-8 rounded-xl">
               <h3 className="text-xl font-bold mb-4">Innovation</h3>
               <p className="text-gray-700">
-                We're constantly exploring new technologies and approaches to solve complex problems in creative ways.
+                We&apos;re constantly exploring new technologies and approaches to solve complex problems in creative ways.
               </p>
             </div>
             

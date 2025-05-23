@@ -88,7 +88,7 @@ const GetStarted = () => {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-gray-800 mb-4 text-center">Our Process</h2>
             <p className="text-gray-600 mb-12 text-center max-w-2xl mx-auto">
-              We've developed a streamlined approach to ensure your project is completed efficiently and effectively.
+              We&apos;ve developed a streamlined approach to ensure your project is completed efficiently and effectively.
             </p>
             
             <div className="relative">

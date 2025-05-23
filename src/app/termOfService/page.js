@@ -24,7 +24,7 @@ const TermsOfService = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto prose prose-gray">
               <p>
-                These Terms of Service ("Terms") govern your access to and use of the Profoelctron Solution website and services. Please read these Terms carefully before using our services.
+                These Terms of Service (&quot;Terms&quot;) govern your access to and use of the Profoelctron Solution website and services. Please read these Terms carefully before using our services.
               </p>
               
               <Separator className="my-8" />
@@ -79,7 +79,7 @@ const TermsOfService = () => {
               
               <h2 className="text-2xl font-bold mt-8 mb-4">9. Indemnification</h2>
               <p>
-                You agree to indemnify and hold harmless Profoelctron Solution, its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses, including reasonable attorneys' fees, arising out of or in any way connected with your access to or use of our services or your violation of these Terms.
+                You agree to indemnify and hold harmless Profoelctron Solution, its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses, including reasonable attorneys&apos; fees, arising out of or in any way connected with your access to or use of our services or your violation of these Terms.
               </p>
               
               <h2 className="text-2xl font-bold mt-8 mb-4">10. Changes to Terms</h2>

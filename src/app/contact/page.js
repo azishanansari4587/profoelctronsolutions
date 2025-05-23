@@ -56,7 +56,7 @@ const Contact = () => {
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Get In Touch</h1>
             <p className="text-xl max-w-2xl mx-auto opacity-90">
-              We're here to help you transform your business with innovative technology solutions
+              We&apos;re here to help you transform your business with innovative technology solutions
             </p>
           </div>
         </section>

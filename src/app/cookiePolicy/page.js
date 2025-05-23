@@ -34,7 +34,7 @@ const CookiePolicy = () => {
                 Cookies are small data files that are placed on your computer or mobile device when you visit a website. Cookies are widely used by website owners to make their websites work, or to work more efficiently, as well as to provide reporting information.
               </p>
               <p className="mt-4">
-                Cookies set by the website owner (in this case, Profoelctron Solution) are called "first-party cookies". Cookies set by parties other than the website owner are called "third-party cookies". Third-party cookies enable third-party features or functionality to be provided on or through the website (e.g., advertising, interactive content, and analytics).
+                Cookies set by the website owner (in this case, Profoelctron Solution) are called &quot;first-party cookies&quot;. Cookies set by parties other than the website owner are called &quot;third-party cookies&quot;. Third-party cookies enable third-party features or functionality to be provided on or through the website (e.g., advertising, interactive content, and analytics).
               </p>
               
               <Separator className="my-8" />

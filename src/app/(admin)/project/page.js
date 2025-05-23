@@ -267,7 +267,7 @@ const Project = () => {
                                     <DialogHeader>
                                       <DialogTitle>Confirm Deletion</DialogTitle>
                                       <DialogDescription>
-                                        Are you sure you want to delete "{post.title}"? This action cannot be undone.
+                                        Are you sure you want to delete &quot;{post.title}&quot;? This action cannot be undone.
                                       </DialogDescription>
                                     </DialogHeader>
                                     <DialogFooter>

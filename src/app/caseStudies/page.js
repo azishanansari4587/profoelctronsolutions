@@ -72,7 +72,7 @@ const CaseStudies = () => {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Success Stories</h1>
             <p className="text-lg text-gray-600 mb-8">
-              Explore how we've helped organizations across industries solve complex challenges and achieve their business goals.
+              Explore how we&apos;ve helped organizations across industries solve complex challenges and achieve their business goals.
             </p>
             {/* <div className="flex flex-wrap justify-center gap-3">
               <Button variant="secondary">All Industries</Button>
@@ -190,7 +190,7 @@ const CaseStudies = () => {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Transform Your Business?</h2>
           <p className="max-w-2xl mx-auto mb-8">
-            Let's discuss how our technology solutions can help you solve your business challenges and drive growth.
+            Let&apos;s discuss how our technology solutions can help you solve your business challenges and drive growth.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button variant="secondary"><Link href={"/consultation"}>Schedule a Consultation</Link></Button>

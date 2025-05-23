@@ -299,7 +299,7 @@ const ScheduleConsultation = () => {
                       <h3 className="text-xl font-semibold text-gray-800">Initial Discussion</h3>
                     </div>
                     <p className="text-gray-600">
-                      We'll discuss your business needs, challenges, and goals to understand how our technology solutions can best serve you.
+                      We&apos;ll discuss your business needs, challenges, and goals to understand how our technology solutions can best serve you.
                     </p>
                   </div>
                   
@@ -319,7 +319,7 @@ const ScheduleConsultation = () => {
                       <h3 className="text-xl font-semibold text-gray-800">Proposal & Roadmap</h3>
                     </div>
                     <p className="text-gray-600">
-                      You'll receive a comprehensive proposal outlining our recommended approach, timeline, and investment requirements.
+                      You'&apos;ll receive a comprehensive proposal outlining our recommended approach, timeline, and investment requirements.
                     </p>
                   </div>
                   

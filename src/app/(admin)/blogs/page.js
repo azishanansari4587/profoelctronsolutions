@@ -8,7 +8,6 @@ import {
   Card, 
   CardContent, 
   CardDescription, 
-  CardFooter, 
   CardHeader, 
   CardTitle 
 } from "@/components/ui/card";
@@ -44,7 +43,6 @@ import { Trash, Edit } from "lucide-react";
 
 import { useRef } from 'react'
 import TiptapEditor from '@/components/TiptapEditor';
-// import 'react-quill/dist/quill.snow.css';
 
 // Sample blog posts data
 const initialPosts = [

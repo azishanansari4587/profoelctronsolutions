@@ -49,6 +49,7 @@
     "cloudinary": "^2.6.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.509.0",
     "mysql2": "^3.14.1",
     "next": "15.3.2",

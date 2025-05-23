@@ -40,10 +40,10 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { trash, edit, plus, Plus, Trash, Edit } from "lucide-react";
+import { Trash, Edit } from "lucide-react";
 
 import { useRef } from 'react'
-import TiptapEditor from '@/components/TipTapEditor';
+import TiptapEditor from '@/components/TiptapEditor';
 // import 'react-quill/dist/quill.snow.css';
 
 // Sample blog posts data

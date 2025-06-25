@@ -159,7 +159,6 @@ const Contact = () => {
             </div>
           </div>
         </section>
-        
         {/* Map Section */}
         <section className="bg-white py-12">
           <div className="container mx-auto px-4">

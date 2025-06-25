@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Footer from '@/components/Footer';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,10 +39,11 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { Trash, Edit } from "lucide-react";
+import { Trash, Pencil } from "lucide-react";
 
 import { useRef } from 'react'
 import TiptapEditor from '@/components/TiptapEditor';
+import Spinner from '@/components/Spinner';
 
 // Sample blog posts data
 const initialPosts = [
@@ -93,6 +94,9 @@ const Blogs = () => {
   const [posts, setPosts] = useState(initialPosts);
   const fileInputRef = useRef(null);
 
+  const [openEditDialog, setOpenEditDialog]= useState(false);
+  const [editBlogData, setEditBlogData] = useState(null);
+
   // Form state
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
@@ -120,6 +124,28 @@ const Blogs = () => {
       setImage(data.url); // Store Cloudinary image URL
     }
   };
+
+
+  const [subscribers, setSubscribers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await fetch("/api/blogs");
+        const data = await res.json();
+        setSubscribers(data.subscribers);
+      } catch (error) {
+        console.error("Error fetching blog:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  if (loading) return <Spinner/>;
   
 
 
@@ -202,14 +228,14 @@ const handleSubmit = async (e) => {
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       <span>Manage Blog Posts</span>
-                      {/* <Button 
+                      <Button 
                         variant="outline" 
-                        onClick={resetForm}
+                        // onClick={resetForm}
                         className="flex items-center"
                       >
-                        <Plus className="mr-2 h-4 w-4" />
-                        New Post
-                      </Button> */}
+                        Total Members :
+                        <span className='rounded-full bg-primary text-white px-2 py-1'>{subscribers.length}</span>
+                      </Button>
                     </CardTitle>
                     <CardDescription>
                       View, edit or delete your blog posts
@@ -229,32 +255,48 @@ const handleSubmit = async (e) => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {posts.map((post) => (
-                          <TableRow key={post.id}>
-                            <TableCell className="font-medium">{post.title}</TableCell>
-                            <TableCell>{post.category}</TableCell>
+                        {subscribers?.length === 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={6} className="text-center py-4">
+                              No blog posts found.
+                            </TableCell>
+                          </TableRow>) 
+                          : (subscribers.map((blog) => (
+                          <TableRow key={blog.id}>
+                            <TableCell className="font-medium max-w-[250px] truncate"
+                              title={blog.title}
+                            >
+                              {blog.title}</TableCell>
+                            <TableCell>{blog.category}</TableCell>
                             <TableCell>
                               <span 
                                 className={`px-2 py-1 rounded-full text-xs ${
-                                  post.status === 'Published' 
+                                  blog.status === 'Published' 
                                     ? 'bg-green-100 text-green-700' 
                                     : 'bg-yellow-100 text-yellow-700'
                                 }`}
                               >
-                                {post.status}
+                                {blog.status}
                               </span>
                             </TableCell>
-                            <TableCell>{post.date}</TableCell>
-                            <TableCell>{post.author}</TableCell>
+                            <TableCell>{new Date(blog.date).toLocaleDateString('en-GB', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                            })}</TableCell>
+                            <TableCell>{blog.author}</TableCell>
                             <TableCell className="text-right">
                               <div className="flex justify-end gap-2">
-                                <Button 
-                                  variant="outline" 
-                                  size="sm" 
-                                  onClick={() => handleEditPost(post)}
-                                >
-                                  <Edit className="h-4 w-4" />
-                                </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setEditBlogData(blog); // store blog data in state
+                                  setOpenEditDialog(true); // open dialog
+                                }}
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </Button>
                                 
                                 <Dialog>
                                   <DialogTrigger asChild>
@@ -266,7 +308,7 @@ const handleSubmit = async (e) => {
                                     <DialogHeader>
                                       <DialogTitle>Confirm Deletion</DialogTitle>
                                       <DialogDescription>
-                                        Are you sure you want to delete &quot;{post.title}&quot;? This action cannot be undone.
+                                        Are you sure you want to delete &quot;{blog.title}&quot;? This action cannot be undone.
                                       </DialogDescription>
                                     </DialogHeader>
                                     <DialogFooter>
@@ -276,7 +318,7 @@ const handleSubmit = async (e) => {
                                       <DialogClose asChild>
                                         <Button 
                                           variant="destructive" 
-                                          onClick={() => handleDeletePost(post.id)}
+                                          onClick={() => handleDeletePost(blog.id)}
                                         >
                                           Delete
                                         </Button>
@@ -287,7 +329,7 @@ const handleSubmit = async (e) => {
                               </div>
                             </TableCell>
                           </TableRow>
-                        ))}
+                        )))}
                       </TableBody>
                     </Table>
                   </CardContent>
@@ -449,10 +491,103 @@ const handleSubmit = async (e) => {
             </Tabs>
           </div>
         </section>
+
+        <Dialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
+          <DialogContent className="w-full max-w-7xl max-h-[80vh] p-6 overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Edit Blog</DialogTitle>
+            </DialogHeader>
+            {editBlogData && (
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const res = await fetch("/api/blogs", {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(editBlogData),
+                  });
+                  const result = await res.json();
+                  if (res.ok) {
+                    toast.success("Blog updated!");
+                    setOpenEditDialog(false);
+                    // Optionally refresh blog list
+                  } else {
+                    toast.error(result.message || "Update failed");
+                  }
+                }}
+                className="space-y-4"
+              >
+                <Input
+                  value={editBlogData.title}
+                  onChange={(e) =>
+                    setEditBlogData({ ...editBlogData, title: e.target.value })
+                  }
+                  placeholder="Title"
+                />
+                <Input
+                  value={editBlogData.excerpt}
+                  onChange={(e) =>
+                    setEditBlogData({ ...editBlogData, excerpt: e.target.value })
+                  }
+                  placeholder="Excerpt"
+                />
+                <Input
+                  value={editBlogData.category}
+                  onChange={(e) =>
+                    setEditBlogData({ ...editBlogData, category: e.target.value })
+                  }
+                  placeholder="Category"
+                />
+                <Input
+                  type="date"
+                  value={editBlogData.date}
+                  onChange={(e) =>
+                    setEditBlogData({ ...editBlogData, date: e.target.value })
+                  }
+                />
+                <Input
+                  value={editBlogData.author}
+                  onChange={(e) =>
+                    setEditBlogData({ ...editBlogData, author: e.target.value })
+                  }
+                  placeholder="Author"
+                />
+                <Input
+                  value={editBlogData.status}
+                  onChange={(e) =>
+                    setEditBlogData({ ...editBlogData, status: e.target.value })
+                  }
+                  placeholder="Status"
+                />
+                <TiptapEditor value={editBlogData.content} onChange={(e) =>
+                    setEditBlogData({ ...editBlogData, content: e.target.value })
+                  }  />
+                
+                <Input
+                  value={editBlogData.image}
+                  onChange={(e) =>
+                    setEditBlogData({ ...editBlogData, image: e.target.value })
+                  }
+                  placeholder="Image URL"
+                />
+                <DialogFooter className="sticky">
+                  <Button type="submit">Save Changes</Button>
+                </DialogFooter>
+              </form>
+            )}
+          </DialogContent>
+        </Dialog>
       </main>
       
       <Footer />
+
+      
     </div>
+
+
+
   );
 };
 

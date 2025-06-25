@@ -205,6 +205,7 @@ const ScheduleConsultation = () => {
                         inputStyle={{ width: '100%' }}
                         inputClass="rounded-md"
                         enableSearch
+                        required
                       />
                     </div>
                     <div>
@@ -222,7 +223,7 @@ const ScheduleConsultation = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {serviceOptions.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                          <SelectItem key={option.value} value={option.value} required>{option.label}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -250,6 +251,7 @@ const ScheduleConsultation = () => {
                               return date < today || date > new Date(today.setMonth(today.getMonth() + 2));
                             }}
                             initialFocus
+                            required
                           />
                         </PopoverContent>
                       </Popover>
@@ -263,7 +265,7 @@ const ScheduleConsultation = () => {
                         </SelectTrigger>
                         <SelectContent>
                           {timeSlots.map((slot) => (
-                            <SelectItem key={slot.value} value={slot.value}>{slot.label}</SelectItem>
+                            <SelectItem key={slot.value} value={slot.value} required>{slot.label}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>

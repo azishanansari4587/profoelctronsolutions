@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Footer from '@/components/Footer';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,6 +41,7 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { trash, edit, plus, Plus, Trash, Edit } from "lucide-react";
+import Spinner from '@/components/Spinner';
 
 // Sample blog posts data
 const initialPosts = [
@@ -87,9 +88,30 @@ const Team = () => {
     image: null,
     status: 'active'
   });
-  const [loading, setLoading] = useState(false);
+
   const statusOptions = ["Active", "Deactive"];
   const [status, setStatus] = useState("Active");
+
+  const [subscribers, setSubscribers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await fetch("/api/teamMember");
+        const data = await res.json();
+        setSubscribers(data.subscribers);
+      } catch (error) {
+        console.error("Error fetching blog:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  if (loading) return <Spinner/>;
 
 
   const handleChange = (e) => {
@@ -159,6 +181,7 @@ const Team = () => {
   return (
     <div className="min-h-screen flex flex-col">
       
+
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-tech-darkBlue to-tech-blue text-white py-10">
@@ -190,7 +213,7 @@ const Team = () => {
                         className="flex items-center"
                       >
                         Total Members :
-                        <span className='rounded-full bg-primary text-white px-2 py-1'>12</span>
+                        <span className='rounded-full bg-primary text-white px-2 py-1'>{subscribers.length}</span>
                       </Button>
                     </CardTitle>
                     <CardDescription>
@@ -204,6 +227,7 @@ const Team = () => {
                         <TableRow>
                           <TableHead>Image</TableHead>
                           <TableHead>Name</TableHead>
+                          <TableHead>Role</TableHead>
                           <TableHead>Position</TableHead>
                           <TableHead>Joining Date</TableHead>
                           <TableHead>Status</TableHead>
@@ -211,16 +235,23 @@ const Team = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {initialPosts.map((post) => (
+                        {subscribers.map((post) => (
                           <TableRow key={post.id}>
                             <TableCell className="font-medium">
-                                <img src={"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt="" width="100" height="100" />
+                                <img src={post.image} alt="" width="100" height="100" />
                             </TableCell>
-                            <TableCell>{post.category}</TableCell>
+                            <TableCell>{post.name}</TableCell>
+                            <TableCell>{post.role}</TableCell>
+                            <TableCell>{post.position}</TableCell>
+                            <TableCell>{new Date(post.joining_date).toLocaleDateString('en-GB', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                            })}</TableCell>
                             <TableCell>
                               <span 
-                                className={`px-2 py-1 rounded-full text-xs ${
-                                  post.status === 'Published' 
+                                className={`px-2 py-1 rounded-full text-xs capitalize ${
+                                  post.status === 'active' 
                                     ? 'bg-green-100 text-green-700' 
                                     : 'bg-yellow-100 text-yellow-700'
                                 }`}
@@ -228,8 +259,6 @@ const Team = () => {
                                 {post.status}
                               </span>
                             </TableCell>
-                            <TableCell>{post.date}</TableCell>
-                            <TableCell>{post.author}</TableCell>
                             <TableCell className="text-right">
                               <div className="flex justify-end gap-2">
                                 <Button 
@@ -250,7 +279,7 @@ const Team = () => {
                                     <DialogHeader>
                                       <DialogTitle>Confirm Deletion</DialogTitle>
                                       <DialogDescription>
-                                        Are you sure you want to delete &quot;{post.title}&quot;? This action cannot be undone.
+                                        Are you sure you want to delete &quot;{post.name}&quot;? This action cannot be undone.
                                       </DialogDescription>
                                     </DialogHeader>
                                     <DialogFooter>
@@ -308,23 +337,6 @@ const Team = () => {
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {/* <div>
-                            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
-                              Category
-                            </label>
-                            <Select value={category} onValueChange={setCategory}>
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select category" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {categories.map((cat) => (
-                                  <SelectItem key={cat} value={cat}>
-                                    {cat}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div> */}
                           
                           <div>
                             <label htmlFor="position" className="block text-sm font-medium text-gray-700 mb-1">
@@ -405,18 +417,11 @@ const Team = () => {
                       </div>
                       
                       <div className="flex justify-end space-x-4">
-                        {/* <Button 
-                          type="button" 
-                          variant="outline" 
-                          onClick={resetForm}
-                        >
-                          {isEditing ? "Cancel" : "Clear"}
-                        </Button> */}
                         <Button 
                           type="submit"
                           className="bg-tech-blue hover:bg-tech-lightBlue"
                         >
-                          {/* {isEditing ? "Update Post" : "Create Post"} */}
+                          Add Team Member
                         </Button>
                       </div>
                     </form>

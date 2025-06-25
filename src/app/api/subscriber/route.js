@@ -55,3 +55,40 @@ export async function GET(request) {
     );
   }
 }
+
+
+
+export async function DELETE(request) {
+  try {
+    const db = await connection();
+    
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { message: "Subscriber ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const [result] = await db.execute("DELETE FROM subscriber WHERE id = ?", [id]);
+
+    if (result.affectedRows === 0) {
+      return NextResponse.json(
+        { message: "Subscriber not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      message: "Subscriber deleted successfully",
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error deleting subscriber", error: error.message },
+      { status: 500 }
+    );
+  }
+}
+

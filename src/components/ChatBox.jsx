@@ -24,8 +24,8 @@ export default function ChatBox() {
       });
 
       if (!res.ok) throw new Error("Failed to fetch reply");
-
       const data = await res.json();
+
       setMessages(prev => [...prev, { sender: "bot", text: data.reply }]);
     } catch (err) {
       setMessages(prev => [...prev, { sender: "bot", text: "❌ Error: " + err.message }]);
@@ -34,14 +34,7 @@ export default function ChatBox() {
     }
   };
 
-//   useEffect(() => {
-//     if (chatContainerRef.current) {
-//       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-//     }
-//   }, [messages]);
-
- // Auto-scroll to bottom on new message
- useEffect(() => {
+  useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTo({
         top: chatContainerRef.current.scrollHeight,
@@ -57,14 +50,21 @@ export default function ChatBox() {
   const suggestions = ["What is Next.js?", "How does Gemini work?", "Give me a JS tip"];
 
   return (
-    <div className="flex flex-col h-screen p-4">
-      {/* Scrollable Chat Container */}
+    <div className="flex flex-col h-full">
+      {/* Scrollable chat area */}
       <div
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto px-1 space-y-2 border rounded-md p-2"
+        className="flex-1 overflow-y-auto px-3 py-3 space-y-2"
       >
         {messages.map((msg, idx) => (
-          <div key={idx} className={`p-2 rounded-lg text-sm max-w-xs ${msg.sender === "bot" ? "bg-gray-100 text-left" : "bg-blue-500 text-white ml-auto"}`}>
+          <div
+            key={idx}
+            className={`p-2 rounded-lg text-sm max-w-xs ${
+              msg.sender === "bot"
+                ? "bg-gray-100 text-left"
+                : "bg-blue-500 text-white ml-auto"
+            }`}
+          >
             {msg.text}
           </div>
         ))}
@@ -76,26 +76,29 @@ export default function ChatBox() {
       </div>
 
       {/* Suggestions */}
-      <div className="flex flex-wrap gap-2 mt-2">
+      <div className="flex flex-wrap gap-2 px-3 py-2 border-t bg-white">
         {suggestions.map((s, i) => (
           <button
             key={i}
             className="text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-full"
-            onClick={() => setInput(s)}
+            onClick={() => {
+              setInput(s);
+              setTimeout(() => sendMessage(), 100);
+            }}
           >
             {s}
           </button>
         ))}
       </div>
 
-      {/* Input Field */}
-      <div className="flex gap-1 mt-2">
+      {/* Input */}
+      <div className="flex gap-2 px-3 py-2 border-t bg-white">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-1 border rounded-md px-3 py-2 text-sm"
+          className="flex-1 border rounded-md px-3 py-2 text-sm focus:outline-none"
           placeholder="Type your message..."
         />
         <button

@@ -6,72 +6,26 @@ import React from 'react'
 import { Edit, Trash2 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import Spinner from '@/components/Spinner'
+import { toast } from 'react-toastify'
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogDescription, 
+  DialogFooter, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger,
+  DialogClose
+} from "@/components/ui/dialog";
 
 
-const userColumns = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        className="border-black"
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-        // onChange={(e) => table.toggleAllPageRowsSelected(!!e.target.checked)}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-      className="border-black"
-        checked={row.getIsSelected()}
-        // onChange={(e) => row.toggleSelected(!!e.target.checked)}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-
-  {
-    accessorKey: "email",
-    header: "Email",
-    cell: ({ row }) => (
-      <div>{row.getValue("email")}</div>
-    )
-  },
-
-  {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row }) => {
-      const branch = row.original
-      return (
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleEdit(branch)}
-          >
-            <Edit/>
-          </Button>
-          <Button
-            variant="destructive"
-            // size="sm"
-            className="h-8 w-8 p-0"
-            onClick={() => handleDelete(branch)}
-          >
-            <Trash2/>
-          </Button>
-        </div>
-      )
-    },
-  },
-]
 
 const Subscriber = () => {
   const [subscribers, setSubscribers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedSubscriber, setSelectedSubscriber] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
 
   useEffect(() => {
     const fetchSubscribers = async () => {
@@ -90,6 +44,91 @@ const Subscriber = () => {
   }, []);
 
   if (loading) return <Spinner/>;
+
+
+  const handleDeleteSubscriber = async (id) => {
+    try {
+      const res = await fetch(`/api/subscriber?id=${id}`, {
+        method: "DELETE",
+      });
+  
+      const data = await res.json();
+  
+      if (res.ok) {
+        toast.success("Subscriber deleted");
+        setSubscribers((prev) => prev.filter((s) => s.id !== id));
+      } else {
+        toast.error(data.message || "Delete failed");
+      }
+    } catch (err) {
+      toast.error("Error deleting subscriber");
+    } finally {
+      setIsDialogOpen(false);
+      setSelectedSubscriber(null);
+    }
+  };
+  
+  
+  const userColumns = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          className="border-black"
+          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+          // onChange={(e) => table.toggleAllPageRowsSelected(!!e.target.checked)}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+        className="border-black"
+          checked={row.getIsSelected()}
+          // onChange={(e) => row.toggleSelected(!!e.target.checked)}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+  
+    {
+      accessorKey: "email",
+      header: "Email",
+      cell: ({ row }) => (
+        <div>{row.getValue("email")}</div>
+      )
+    },
+  
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        const subscriber = row.original;
+        return (
+          <div className="flex gap-2">
+            <Button
+              variant="destructive"
+              className="h-8 w-8 p-0"
+              onClick={() => {
+                setSelectedSubscriber(subscriber);
+                setIsDialogOpen(true);
+              }}
+            >
+              <Trash2 />
+            </Button>
+          </div>
+        );
+      },
+    }
+    
+  ]
+
+  
+  
+  
 
 
   return (
@@ -113,6 +152,29 @@ const Subscriber = () => {
               </div>
           </div>
         )}
+        {/** Dilaog Box for Delete */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Confirm Deletion</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to delete <strong>{selectedSubscriber?.email}</strong>? This action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button
+                variant="destructive"
+                onClick={() => handleDeleteSubscriber(selectedSubscriber?.id)}
+              >
+                Delete
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
     </div>
   )
 }

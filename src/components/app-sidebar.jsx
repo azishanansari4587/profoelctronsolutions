@@ -54,11 +54,11 @@ const data = {
       url: "/dashboard",
       icon: LayoutDashboardIcon,
     },
-    {
-      title: "Analytics",
-      url: "/analytics",
-      icon: BarChartIcon,
-    },
+    // {
+    //   title: "Analytics",
+    //   url: "/analytics",
+    //   icon: BarChartIcon,
+    // },
 
     {
         title: "Projects",

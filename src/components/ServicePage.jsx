@@ -92,12 +92,25 @@ const ServicePage = ({ slug: propSlug }) => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {getServiceFeatures(slug).map((feature, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-                <div className={cn("p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4", service.color)}>
-                  <feature.icon className={cn("w-6 h-6", service.iconColor)} />
+              // <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+              //   <div className={cn("p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4", service.color)}>
+              //     <feature.icon className={cn("w-6 h-6", service.iconColor)} />
+              //   </div>
+              //   <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
+              //   <p className="text-gray-600">{feature.description}</p>
+              // </div>
+              <div key={index} className="relative group transition-all duration-300">
+              {/* Gradient glow layer */}
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 blur-md z-0 transition-all duration-500"></div>
+
+              {/* Main card content */}
+                <div className="relative z-10 bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                  <div className={cn("p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4", service.color)}>
+                    <feature.icon className={cn("w-6 h-6", service.iconColor)} />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
+                  <p className="text-gray-600">{feature.description}</p>
                 </div>
-                <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
               </div>
             ))}
           </div>
